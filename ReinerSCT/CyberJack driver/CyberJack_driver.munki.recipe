@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Downloads latest CyberJack driver pkg and imports into Munki.
+
+This recipe defaults supported_architectures to both "x86_64" and "arm64" for
+the download of the ReinserSCT CyberJack driver. If you override the default ARCHITECTURE value,
+also remember to adjust the supported_architectures in your override.</string>
+    <key>Identifier</key>
+    <string>com.github.aguehl.munki.CyberJack-driver</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>cyberjack_driver</string>
+        <key>ARCHITECTURE</key>
+        <string>arm64</string>
+        <key>MUNKI_REPO_SUBDIR</key>
+        <string>apps/%NAME%</string>
+        <key>pkginfo</key>
+        <dict>
+            <key>catalogs</key>
+            <array>
+                <string>testing</string>
+            </array>
+            <key>description</key>
+            <string>ReinerSCT CyberJack driver for the following card readers: cyberJack RFID komfort, cyberJack RFID komfort FON, cyberJack RFID standard, cyberJack RFID secoder, cyberJack go plus, cyberJack wave and cyberJack one</string>
+            <key>developer</key>
+            <string>REINER Kartengerate GmbH und Co. KG</string>
+            <key>display_name</key>
+            <string>CyberJack driver</string>
+            <key>minimum_os_version</key>
+	        <string>13.0.0</string>
+            <key>name</key>
+            <string>%NAME%</string>
+            <key>RestartAction</key>
+            <string>RequireRestart</string>
+            <key>unattended_install</key>
+            <true/>
+            <key>supported_architectures</key>
+            <array>
+                <string>%ARCHITECTURE%</string>
+            </array>
+        </dict>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>0.4.0</string>
+    <key>ParentRecipe</key>
+    <string>com.github.aguehl.download.CyberJack-driver</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Arguments</key>
+            <dict>
+                <key>pkg_path</key>
+                <string>%pathname%</string>
+                <key>repo_subdirectory</key>
+                <string>%MUNKI_REPO_SUBDIR%</string>
+                <key>additional_makepkginfo_options</key>
+                <array>
+                    <string>--pkgvers=%version%</string>
+                </array>
+            </dict>
+            <key>Processor</key>
+            <string>MunkiImporter</string>
+        </dict>
+    </array>
+</dict>
+</plist>

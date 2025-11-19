@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Description</key>
+    <string>Downloads latest ReinerSCT CyberJack driver.
+
+Allowable ARCHITECTURE values:
+- "arm64" for the Apple Silicon build (default)
+- "x86_64" for the Intel build
+</string>
+    <key>Identifier</key>
+    <string>com.github.aguehl.download.CyberJack-driver</string>
+    <key>Input</key>
+    <dict>
+        <key>NAME</key>
+        <string>cyberjack_driver</string>
+        <key>ARCHITECTURE</key>
+        <string>arm64</string>
+    </dict>
+    <key>MinimumVersion</key>
+    <string>0.4.0</string>
+    <key>Process</key>
+    <array>
+        <dict>
+            <key>Processor</key>
+            <string>URLTextSearcher</string>
+            <key>Arguments</key>
+            <dict>
+                <key>url</key>
+                <string>https://www.reiner-sct.com/treiber-mac</string>
+                <key>re_pattern</key>
+                <string>href="https:\/\/support\.reiner-sct\.de\/downloads\/MAC\/pcsc-cyberjack_([a-zA-Z0-9\.]+)-%ARCHITECTURE%-signed\.pkg"</string>
+                <key>result_output_var_name</key>
+                <string>version</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>URLDownloader</string>
+            <key>Arguments</key>
+            <dict>
+                <key>url</key>
+                <string>https://support.reiner-sct.de/downloads/MAC/pcsc-cyberjack_%version%-%ARCHITECTURE%-signed.pkg</string>
+                <key>filename</key>
+                <string>%NAME%_%ARCHITECTURE%-%version%.pkg</string>
+            </dict>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>EndOfCheckPhase</string>
+        </dict>
+        <dict>
+            <key>Processor</key>
+            <string>CodeSignatureVerifier</string>
+            <key>Arguments</key>
+            <dict>
+                <key>input_path</key>
+                <string>%pathname%</string>
+                <key>expected_authority_names</key>
+                <array>
+                    <string>Developer ID Installer: REINER Kartengerate GmbH und Co. KG (5A7M4P6EPT)</string>
+                    <string>Developer ID Certification Authority</string>
+                    <string>Apple Root CA</string>
+                </array>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
